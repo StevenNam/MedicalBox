@@ -43,97 +43,97 @@ angular.module('AppCore', [])
    * 出現版本: 1.0
    * 需求插件: angular-translate
    */
-  .factory('ErrorMessageService', ['$ionicPopup', '$translate', function ($ionicPopup, $translate) {
+  /*.factory('ErrorMessageService', ['$ionicPopup', '$translate', function ($ionicPopup, $translate) {
 
-    /**
-     * 網絡問題標題
-     */
-    var connectionErrorHeader;
-    $translate('ERROR_MESSAGE.CONNECTION_ERROR.HEADER').then(function (header) {
-      connectionErrorHeader = header;
-    });
+   /!**
+   * 網絡問題標題
+   *!/
+   var connectionErrorHeader;
+   $translate('ERROR_MESSAGE.CONNECTION_ERROR.HEADER').then(function (header) {
+   connectionErrorHeader = header;
+   });
 
-    /**
-     * 網絡問題信息
-     */
-    var connectionErrorMessage;
-    $translate('ERROR_MESSAGE.CONNECTION_ERROR.MESSAGE').then(function (message) {
-      connectionErrorMessage = message;
-    });
+   /!**
+   * 網絡問題信息
+   *!/
+   var connectionErrorMessage;
+   $translate('ERROR_MESSAGE.CONNECTION_ERROR.MESSAGE').then(function (message) {
+   connectionErrorMessage = message;
+   });
 
-    /**
-     * 請求內容錯誤標題
-     */
-    var notAcceptableErrorHeader;
-    $translate('ERROR_MESSAGE.NOT_ACCEPTABLE_ERROR.HEADER').then(function (header) {
-      notAcceptableErrorHeader = header;
-    });
+   /!**
+   * 請求內容錯誤標題
+   *!/
+   var notAcceptableErrorHeader;
+   $translate('ERROR_MESSAGE.NOT_ACCEPTABLE_ERROR.HEADER').then(function (header) {
+   notAcceptableErrorHeader = header;
+   });
 
-    /**
-     * 請求內容錯誤信息
-     */
-    var notAcceptableErrorMessage;
-    $translate('ERROR_MESSAGE.NOT_ACCEPTABLE_ERROR.MESSAGE').then(function (message) {
-      notAcceptableErrorMessage = message;
-    });
+   /!**
+   * 請求內容錯誤信息
+   *!/
+   var notAcceptableErrorMessage;
+   $translate('ERROR_MESSAGE.NOT_ACCEPTABLE_ERROR.MESSAGE').then(function (message) {
+   notAcceptableErrorMessage = message;
+   });
 
-    /**
-     * 確認按鈕
-     */
-    var buttonOK;
-    $translate('ERROR_MESSAGE.BUTTON_OK').then(function (text) {
-      buttonOK = text;
-    })
+   /!**
+   * 確認按鈕
+   *!/
+   var buttonOK;
+   $translate('ERROR_MESSAGE.BUTTON_OK').then(function (text) {
+   buttonOK = text;
+   })
 
-    /**
-     * 建立錯誤信息
-     * @param header 錯誤信息標題
-     * @param message 錯誤信息內容
-     * @returns 錯誤信息
-     * @private
-     */
-    var _customErrorMessage = function (header, message) {
-      return $ionicPopup.alert(
-        {
-          title: header,
-          template: message,
-          buttons: [{
-            text: buttonOK,
-            type: 'button-default'
-          }]
-        });
-    }
+   /!**
+   * 建立錯誤信息
+   * @param header 錯誤信息標題
+   * @param message 錯誤信息內容
+   * @returns 錯誤信息
+   * @private
+   *!/
+   var _customErrorMessage = function (header, message) {
+   return $ionicPopup.alert(
+   {
+   title: header,
+   template: message,
+   buttons: [{
+   text: buttonOK,
+   type: 'button-default'
+   }]
+   });
+   }
 
-    return {
+   return {
 
-      /**
-       * 建立自定義錯誤信息
-       * @param header 錯誤信息標題
-       * @param message 錯誤信息內容
-       * @returns 錯誤信息
-       */
-      customErrorMessage: function (header, message) {
-        return _customErrorMessage(header, message);
-      },
+   /!**
+   * 建立自定義錯誤信息
+   * @param header 錯誤信息標題
+   * @param message 錯誤信息內容
+   * @returns 錯誤信息
+   *!/
+   customErrorMessage: function (header, message) {
+   return _customErrorMessage(header, message);
+   },
 
-      /**
-       * 建立網絡錯誤信息
-       * @returns 網絡錯誤信息
-       */
-      networkErrorMessage: function () {
-        return _customErrorMessage(connectionErrorHeader, connectionErrorMessage);
-      },
+   /!**
+   * 建立網絡錯誤信息
+   * @returns 網絡錯誤信息
+   *!/
+   networkErrorMessage: function () {
+   return _customErrorMessage(connectionErrorHeader, connectionErrorMessage);
+   },
 
-      /**
-       * 建立後台請求內容錯誤信息
-       * @returns 後台請求內容錯誤信息
-       */
-      notAcceptableErrorMessage: function () {
-        return _customErrorMessage(notAcceptableErrorHeader, notAcceptableErrorMessage);
-      }
+   /!**
+   * 建立後台請求內容錯誤信息
+   * @returns 後台請求內容錯誤信息
+   *!/
+   notAcceptableErrorMessage: function () {
+   return _customErrorMessage(notAcceptableErrorHeader, notAcceptableErrorMessage);
+   }
 
-    }
-  }])
+   }
+   }])*/
 
   /**
    * 名稱: PromiseService
@@ -317,60 +317,60 @@ angular.module('AppCore', [])
    * 出現版本: 1.0
    * 需求插件: cordovaAppAvailability, cordovaInAppBrowser
    */
-  .factory('ExternalAppService', function ($log, $cordovaAppAvailability, $cordovaInAppBrowser, PromiseService) {
+  /*.factory('ExternalAppService', function ($log, $cordovaAppAvailability, $cordovaInAppBrowser, PromiseService) {
 
-    /**
-     * 檢查應用是否已安裝
-     * @param iosScheme IOS應用SCHEME
-     * @param androidScheme ANDROID 應用SCHEME
-     * @param success_callback 成功時執行函數
-     * @param error_callback 失敗時執行函數
-     * @private
-     */
-    var _check = function (iosScheme, androidScheme, success_callback, error_callback) {
-      var scheme;
-      if (ionic.Platform.isAndroid()) {
-        scheme = androidScheme;                                                                                     // ANDROID SCHEME
-      }
-      else if (ionic.Platform.isIOS()) {
-        scheme = iosScheme;                                                                                         // IOS SCHEME
-      }
+   /!**
+   * 檢查應用是否已安裝
+   * @param iosScheme IOS應用SCHEME
+   * @param androidScheme ANDROID 應用SCHEME
+   * @param success_callback 成功時執行函數
+   * @param error_callback 失敗時執行函數
+   * @private
+   *!/
+   var _check = function (iosScheme, androidScheme, success_callback, error_callback) {
+   var scheme;
+   if (ionic.Platform.isAndroid()) {
+   scheme = androidScheme;                                                                                     // ANDROID SCHEME
+   }
+   else if (ionic.Platform.isIOS()) {
+   scheme = iosScheme;                                                                                         // IOS SCHEME
+   }
 
 
-      PromiseService.process($cordovaAppAvailability.check(scheme), success_callback, error_callback);
-    }
+   PromiseService.process($cordovaAppAvailability.check(scheme), success_callback, error_callback);
+   }
 
-    return {
+   return {
 
-      /**
-       * 檢查應用是否已安裝
-       * @param iosScheme IOS應用SCHEME
-       * @param androidScheme ANDROID 應用SCHEME
-       * @param success_callback 成功時執行函數
-       * @param error_callback 失敗時執行函數
-       */
-      check: function (iosScheme, androidScheme, success_callback, error_callback) {
-        _check(iosScheme, androidScheme, success_callback, error_callback);
-      },
+   /!**
+   * 檢查應用是否已安裝
+   * @param iosScheme IOS應用SCHEME
+   * @param androidScheme ANDROID 應用SCHEME
+   * @param success_callback 成功時執行函數
+   * @param error_callback 失敗時執行函數
+   *!/
+   check: function (iosScheme, androidScheme, success_callback, error_callback) {
+   _check(iosScheme, androidScheme, success_callback, error_callback);
+   },
 
-      /**
-       * 開啟外部應用
-       * @param iosScheme IOS應用SCHEME
-       * @param androidSceme ANDROID 應用SCHEME
-       * @param url URL
-       */
-      openApp: function (iosScheme, androidSceme, url) {
-        _check(iosScheme, androidSceme,
-          function (resp) {
-            $cordovaInAppBrowser.open(url, '_system');
-          },
-          function (resp) {
-            $cordovaInAppBrowser.open(url, '_system');
-          })
-      }
+   /!**
+   * 開啟外部應用
+   * @param iosScheme IOS應用SCHEME
+   * @param androidSceme ANDROID 應用SCHEME
+   * @param url URL
+   *!/
+   openApp: function (iosScheme, androidSceme, url) {
+   _check(iosScheme, androidSceme,
+   function (resp) {
+   $cordovaInAppBrowser.open(url, '_system');
+   },
+   function (resp) {
+   $cordovaInAppBrowser.open(url, '_system');
+   })
+   }
 
-    }
-  })
+   }
+   })*/
 
   /**
    * 名稱: ImageService
@@ -378,51 +378,51 @@ angular.module('AppCore', [])
    * 出現版本: 1.0
    * 需求插件: cordovaCamera, cordovaImagePicker, cordovaFile
    */
-  .factory('ImageService', function ($cordovaCamera, $cordovaImagePicker, $cordovaFile) {
+  /*.factory('ImageService', function ($cordovaCamera, $cordovaImagePicker, $cordovaFile) {
 
-    return {
+   return {
 
-      /**
-       * 拍照
-       * @param options 相機參數
-       * @param success_callback 成功時執行函數
-       * @param error_callback 失敗時執行函數
-       */
-      takePhoto: function (options, success_callback) {
-        $cordovaCamera.getPicture(options).then(success_callback);
-      },
+   /!**
+   * 拍照
+   * @param options 相機參數
+   * @param success_callback 成功時執行函數
+   * @param error_callback 失敗時執行函數
+   *!/
+   takePhoto: function (options, success_callback) {
+   $cordovaCamera.getPicture(options).then(success_callback);
+   },
 
-      /**
-       * 選擇裝置內儲存的照片
-       * @param options 照片參數
-       * @param success_callback 成功時執行函數
-       * @param error_callback 失敗時執行函數
-       */
-      getPhoto: function (options, success_callback) {
-        $cordovaImagePicker.getPictures(options).then(function (results) {
-          console.log('Files: ', results);
-          if (ionic.Platform.isAndroid()) {
-            // ANDROID 裝置流程
-            console.log('Is Android Device: ', ionic.Platform.isAndroid());
-            console.info('Selected Image: ', results[0].substr(results[0].indexOf('cache') + 6))
-            $cordovaFile.readAsDataURL(cordova.file.cacheDirectory, results[0].substr(results[0].indexOf('cache') + 6))
-              .then(success_callback);
-          }
-          else if (ionic.Platform.isIOS()) {
-            // IOS 裝置流程
-            console.log('Is IOS Device: ', ionic.Platform.isIOS());
-            console.info('Selected Image: ', results[0].substr(results[0].indexOf('tmp') + 4))
-            $cordovaFile.readAsDataURL(cordova.file.tempDirectory, results[0].substr(results[0].indexOf('tmp') + 4))
-              .then(success_callback);
-          }
+   /!**
+   * 選擇裝置內儲存的照片
+   * @param options 照片參數
+   * @param success_callback 成功時執行函數
+   * @param error_callback 失敗時執行函數
+   *!/
+   getPhoto: function (options, success_callback) {
+   $cordovaImagePicker.getPictures(options).then(function (results) {
+   console.log('Files: ', results);
+   if (ionic.Platform.isAndroid()) {
+   // ANDROID 裝置流程
+   console.log('Is Android Device: ', ionic.Platform.isAndroid());
+   console.info('Selected Image: ', results[0].substr(results[0].indexOf('cache') + 6))
+   $cordovaFile.readAsDataURL(cordova.file.cacheDirectory, results[0].substr(results[0].indexOf('cache') + 6))
+   .then(success_callback);
+   }
+   else if (ionic.Platform.isIOS()) {
+   // IOS 裝置流程
+   console.log('Is IOS Device: ', ionic.Platform.isIOS());
+   console.info('Selected Image: ', results[0].substr(results[0].indexOf('tmp') + 4))
+   $cordovaFile.readAsDataURL(cordova.file.tempDirectory, results[0].substr(results[0].indexOf('tmp') + 4))
+   .then(success_callback);
+   }
 
-        }, function (error) {
+   }, function (error) {
 
-        });
-      }
+   });
+   }
 
-    }
-  })
+   }
+   })*/
 
   /**
    * 名稱: LazyLoadingService
@@ -558,3 +558,4 @@ angular.module('AppCore', [])
 
   })
 ;
+
