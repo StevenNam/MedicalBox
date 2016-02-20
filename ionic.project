@@ -1,4 +1,10 @@
 {
   "name": "medicalbox",
-  "app_id": ""
+  "app_id": "",
+  "proxies": [
+    {
+      "path": "/development_api",
+      "proxyUrl": "http://localhost:3000"
+    }
+  ]
 }

@@ -1,7 +1,6 @@
 angular.module('starter.controllers', [])
 
-  .controller('DashCtrl', function ($scope) {
-
+  .controller('DashCtrl', function ($log, $scope) {
   })
 
   .controller('ChatsCtrl', function ($scope, Chats) {

@@ -1,5 +1,12 @@
-
-angular.module('starter', ['ionic',  'starter.controllers', 'starter.services'])
+angular.module('starter',
+  [
+    'ionic',
+    'ng-token-auth',
+    'restangular',
+    'AppCore',
+    'starter.controllers',
+    'starter.services'
+  ])
 
   .run(function ($log, $ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -18,12 +25,31 @@ angular.module('starter', ['ionic',  'starter.controllers', 'starter.services'])
     });
   })
 
-  .config(function ($stateProvider, $urlRouterProvider) {
+  // API 設定
+  .constant('API', {
+    url: '/development_api'
+  })
 
-    // Ionic uses AngularUI Router which uses the concept of states
-    // Learn more here: https://github.com/angular-ui/ui-router
-    // Set up the various states which the app can be in.
-    // Each state's controller can be found in controllers.js
+  .config(function ($stateProvider,
+                    $urlRouterProvider,
+                    $authProvider,
+                    RestangularProvider,
+                    API) {
+
+    // ng-token-auth 設定
+    $authProvider.configure({
+      apiUrl: API.url,                                                                                                // API URL
+      storage: 'localStorage'                                                                                         // 儲存方式
+    })
+
+    // Restangular 設定
+    RestangularProvider.setBaseUrl(API.url);                                                                          // 設定 API 路徑
+    //RestangularProvider.setDefaultHttpFields({cache: true});
+    RestangularProvider.setRestangularFields({etag: 'Etag'});
+    RestangularProvider.setDefaultHeaders({'Accept': "application/json", 'If-Modified-Since': undefined});            // 設定 HTTP 請求預設 HEADER
+    RestangularProvider.setFullResponse(true);
+
+
     $stateProvider
 
     // setup an abstract state for the tabs directive
