@@ -1,5 +1,10 @@
 angular.module('starter.controllers', [])
 
+  /**
+   * 名稱: SignInCtrl
+   * 建立日期: 2016-02-20
+   * 出現版本: 1.0
+   */
   .controller('SignInCtrl', function ($log, $scope, $state, $auth, ErrorMessageService, ApiService, Validation) {
     $log.info('SignInCtrl');
 
@@ -46,7 +51,11 @@ angular.module('starter.controllers', [])
 
   })
 
-
+  /**
+   * 名稱: SignUpCtrl
+   * 建立日期: 2016-02-20
+   * 出現版本: 1.0
+   */
   .controller('SignUpCtrl', function ($log, $scope, $state, $auth, ErrorMessageService, ApiService, Validation) {
     $log.info('SignUpCtrl');
 
@@ -116,11 +125,16 @@ angular.module('starter.controllers', [])
             }, true)
         },
         function (resp) {
-          ErrorMessageService.customErrorMessage('Sign Up Fail', 'b');
+          ErrorMessageService.customErrorMessage('Sign Up Fail', 'Email Already Exists');
         }, true)
     }
 
   })
+
+
+
+
+
 
   .controller('DashCtrl', function ($log, $scope) {
   })

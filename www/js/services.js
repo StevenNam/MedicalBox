@@ -1,5 +1,10 @@
 angular.module('starter.services', [])
 
+  /**
+   * 名稱: Validation
+   * 建立日期: 2016-02-20
+   * 出現版本: 1.0
+   */
   .factory('Validation', function () {
 
     function SignIn () {

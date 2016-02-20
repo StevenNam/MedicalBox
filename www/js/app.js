@@ -76,7 +76,7 @@ angular.module('starter',
         }
       })
 
-
+      // 用戶登入
       .state('signIn', {
         url: '/signIn',
         templateUrl: 'templates/sign-in.html',
@@ -86,6 +86,7 @@ angular.module('starter',
         }
       })
 
+      // 用戶註冊
       .state('signUp', {
         url: '/signUp',
         templateUrl: 'templates/sign-up.html',
@@ -94,7 +95,6 @@ angular.module('starter',
           $log.info('Enter Page: sign-up.html');
         }
       })
-
 
 
       .state('tab', {
