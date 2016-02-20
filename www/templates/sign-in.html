@@ -1,0 +1,55 @@
+<ion-view cache-view="false">
+
+  <ion-content class="padding" has-bouncing="false">
+    <div class="card app-title" style="padding-top: 50% !important;">
+      <h1 class="balanced" style="font-size: 12vw; text-align: center;">
+        Medical Box
+      </h1>
+    </div>
+
+    <label class="item item-input input-text">
+      <input type="text" placeholder="Email" ng-model="signInForm.email">
+    </label>
+    <label class="item item-input input-text input-margin-top">
+      <input type="password" placeholder="Password" ng-model="signInForm.password">
+    </label>
+    <button class="button button-block button-balanced input-button" ng-click="signIn()">Sign In</button>
+    <button class="button button-block button-balanced input-button" ng-click="">Sign Up</button>
+
+
+  <!--<div class="bar bar-header bar-clear background">
+    <a class="button button-icon ion-ios-arrow-back" href="#/login"></a>
+    <h1 class="title" translate="EMAIL_LOGIN.HEADER"></h1>
+  </div>
+
+  <ion-content class="padding has-header" has-bouncing="false">
+    <label class="item item-input input-text">
+      <span class="input-label" translate>EMAIL_LOGIN.FORM.LOGIN.EMAIL</span>
+      <input type="text" ng-model="loginForm.email" ng-change="loginForm.email = check(loginForm.email, '^[a-zA-Z0-9_@.]+$')">
+    </label>
+    <label class="item item-input input-text input-margin-top">
+      <span class="input-label" translate>EMAIL_LOGIN.FORM.LOGIN.PASSWORD</span>
+      <input type="password" ng-model="loginForm.password" ng-change="loginForm.password = check(loginForm.password, '^[a-zA-Z0-9]+$')">
+    </label>
+    <button class="button button-block button-default input-button" ng-click="login()" translate>EMAIL_LOGIN.FORM.LOGIN.BUTTON_LOGIN</button>
+
+    <!--<label class="item item-input input-text">
+      <span class="input-label" translate>EMAIL_LOGIN.FORM.REGISTRATION.USERNAME</span>
+      <input type="text" ng-model="registrationForm.username">
+    </label>-->
+    <!--<label class="item item-input input-text input-margin-top">
+      <span class="input-label" translate>EMAIL_LOGIN.FORM.REGISTRATION.EMAIL</span>
+      <input type="text" ng-model="registrationForm.email" ng-change="registrationForm.email = check(registrationForm.email, '^[a-z0-9_@.]+$')">
+    </label>
+    <label class="item item-input input-text input-margin-top">
+      <span class="input-label" translate>EMAIL_LOGIN.FORM.REGISTRATION.PASSWORD</span>
+      <input type="password" ng-model="registrationForm.password" ng-change="registrationForm.password = check(registrationForm.password, '^[a-zA-Z0-9]+$')">
+    </label>
+    <label class="item item-input input-text input-margin-top">
+      <span class="input-label" translate>EMAIL_LOGIN.FORM.REGISTRATION.CONFIRM_PASSWORD</span>
+      <input type="password" ng-model="registrationForm.password_confirmation" ng-change="registrationForm.password_confirmation = check(registrationForm.password_confirmation, '^[a-zA-Z0-9]+$')">
+    </label>
+    <button class="button button-block button-default input-button" ng-click="register()" translate>EMAIL_LOGIN.FORM.REGISTRATION.BUTTON_REGISTRATION</button>
+    <span translate>EMAIL_LOGIN.SERVICE_TERM</span>-->
+  </ion-content>
+</ion-view>

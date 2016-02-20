@@ -1,1 +1,14 @@
 /* Empty. Add your own CSS if you like */
+.app-title {
+  box-shadow: none !important;
+}
+
+.input-text {
+  border-bottom-left-radius: 5pt;
+  border-top-left-radius: 5pt;
+  border-bottom-right-radius: 5pt;
+  border-top-right-radius: 5pt;
+}
+.input-margin-top {
+  margin-top: 10pt;
+}

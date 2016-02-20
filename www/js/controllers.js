@@ -1,5 +1,52 @@
 angular.module('starter.controllers', [])
 
+  .controller('SignInCtrl', function ($log, $scope, $state, $auth, ErrorMessageService, ApiService, Validation) {
+    $log.info('SignInCtrl');
+
+    $scope.signInForm = Validation.createSignForm();
+
+    $scope.signIn = function () {
+      $log.log($scope.signInForm);
+
+      var message = '';
+      if ($scope.signInForm.email == '') {
+        message += '<li>Email Cant Empty</li><br/>';
+      }
+      else {
+        if (!$scope.signInForm.email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+          message += '<li>Invalid Email Format</li><br/>';
+        }
+      }
+
+      if ($scope.signInForm.password == '') {
+        message += '<li>Password Cant Empty</li><br/>';
+      }
+      else {
+        if ($scope.signInForm.password.length < 8) {
+          message += '<li>Password Less Than 8 Characters</li><br/>';
+        }
+      }
+
+      if (message != '') {
+        ErrorMessageService.customErrorMessage('Sign In Fail', message);
+        return;
+      }
+
+      ApiService.execute(
+        function () {
+          return $auth.submitLogin($scope.signInForm.getJSON());
+        },
+        function (resp) {
+          $state.go('tab.dash')
+        },
+        function (resp) {
+          ErrorMessageService.customErrorMessage('Sign In Fail', 'b');
+        }, true)
+    }
+
+  })
+
+
   .controller('DashCtrl', function ($log, $scope) {
   })
 

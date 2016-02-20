@@ -43,97 +43,40 @@ angular.module('AppCore', [])
    * 出現版本: 1.0
    * 需求插件: angular-translate
    */
-  /*.factory('ErrorMessageService', ['$ionicPopup', '$translate', function ($ionicPopup, $translate) {
+  .factory('ErrorMessageService', function ($ionicPopup) {
 
-   /!**
-   * 網絡問題標題
-   *!/
-   var connectionErrorHeader;
-   $translate('ERROR_MESSAGE.CONNECTION_ERROR.HEADER').then(function (header) {
-   connectionErrorHeader = header;
-   });
+    /**
+     * 建立錯誤信息
+     * @param header 錯誤信息標題
+     * @param message 錯誤信息內容
+     * @returns 錯誤信息
+     * @private
+     */
+    var _customErrorMessage = function (header, message) {
+      return $ionicPopup.alert(
+        {
+          title: '<b class="assertive">' + header + '<b>',
+          template: message,
+          buttons: [{
+            text: 'Confirm',
+            type: 'button-assertive'
+          }]
+        });
+    }
 
-   /!**
-   * 網絡問題信息
-   *!/
-   var connectionErrorMessage;
-   $translate('ERROR_MESSAGE.CONNECTION_ERROR.MESSAGE').then(function (message) {
-   connectionErrorMessage = message;
-   });
+    return {
 
-   /!**
-   * 請求內容錯誤標題
-   *!/
-   var notAcceptableErrorHeader;
-   $translate('ERROR_MESSAGE.NOT_ACCEPTABLE_ERROR.HEADER').then(function (header) {
-   notAcceptableErrorHeader = header;
-   });
-
-   /!**
-   * 請求內容錯誤信息
-   *!/
-   var notAcceptableErrorMessage;
-   $translate('ERROR_MESSAGE.NOT_ACCEPTABLE_ERROR.MESSAGE').then(function (message) {
-   notAcceptableErrorMessage = message;
-   });
-
-   /!**
-   * 確認按鈕
-   *!/
-   var buttonOK;
-   $translate('ERROR_MESSAGE.BUTTON_OK').then(function (text) {
-   buttonOK = text;
-   })
-
-   /!**
-   * 建立錯誤信息
-   * @param header 錯誤信息標題
-   * @param message 錯誤信息內容
-   * @returns 錯誤信息
-   * @private
-   *!/
-   var _customErrorMessage = function (header, message) {
-   return $ionicPopup.alert(
-   {
-   title: header,
-   template: message,
-   buttons: [{
-   text: buttonOK,
-   type: 'button-default'
-   }]
-   });
-   }
-
-   return {
-
-   /!**
-   * 建立自定義錯誤信息
-   * @param header 錯誤信息標題
-   * @param message 錯誤信息內容
-   * @returns 錯誤信息
-   *!/
-   customErrorMessage: function (header, message) {
-   return _customErrorMessage(header, message);
-   },
-
-   /!**
-   * 建立網絡錯誤信息
-   * @returns 網絡錯誤信息
-   *!/
-   networkErrorMessage: function () {
-   return _customErrorMessage(connectionErrorHeader, connectionErrorMessage);
-   },
-
-   /!**
-   * 建立後台請求內容錯誤信息
-   * @returns 後台請求內容錯誤信息
-   *!/
-   notAcceptableErrorMessage: function () {
-   return _customErrorMessage(notAcceptableErrorHeader, notAcceptableErrorMessage);
-   }
-
-   }
-   }])*/
+      /**
+       * 建立自定義錯誤信息
+       * @param header 錯誤信息標題
+       * @param message 錯誤信息內容
+       * @returns 錯誤信息
+       */
+      customErrorMessage: function (header, message) {
+        return _customErrorMessage(header, message);
+      }
+    }
+  })
 
   /**
    * 名稱: PromiseService

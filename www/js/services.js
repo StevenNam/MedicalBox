@@ -1,5 +1,26 @@
 angular.module('starter.services', [])
 
+  .factory('Validation', function () {
+
+    function SignIn () {
+      this.email = "";
+      this.password = "";
+
+      this.getJSON = function () {
+        return {
+          email: this.email,
+          password: this.password
+        }
+      }
+    }
+
+    return {
+      createSignForm: function () {
+        return new SignIn();
+      }
+    }
+  })
+
   .factory('Chats', function () {
     // Might use a resource here that returns a JSON array
 

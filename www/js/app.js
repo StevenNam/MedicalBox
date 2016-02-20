@@ -32,6 +32,7 @@ angular.module('starter',
 
   .config(function ($stateProvider,
                     $urlRouterProvider,
+                    $ionicConfigProvider,
                     $authProvider,
                     RestangularProvider,
                     API) {
@@ -49,17 +50,47 @@ angular.module('starter',
     RestangularProvider.setDefaultHeaders({'Accept': "application/json", 'If-Modified-Since': undefined});            // 設定 HTTP 請求預設 HEADER
     RestangularProvider.setFullResponse(true);
 
+    $ionicConfigProvider.tabs.position('bottom');                                                                   // 設定分頁插件於頁面最低位置
+    //$ionicConfigProvider.views.transition('none');                                                                // 關閉分頁轉換動畫
 
     $stateProvider
 
-    // setup an abstract state for the tabs directive
+    // 驗證用戶
+      .state('validate', {
+        url: '/validate',
+        templateUrl: 'templates/validation.html',
+        //controller: 'LanguageCtrl',
+        onEnter: function ($log, $state, $auth, ApiService) {
+          $log.info('Enter Page: validation.html');
+
+          ApiService.execute(
+            function () {
+              return $auth.validateUser();
+            },
+            function () {
+              $state.go('tab.dash');
+            },
+            function () {
+              $state.go('signIn');
+            }, true)
+        }
+      })
+
+
+      .state('signIn', {
+        url: '/signIn',
+        templateUrl: 'templates/sign-in.html',
+        controller: 'SignInCtrl',
+        onEnter: function ($log) {
+          $log.info('Enter Page: sign-in.html');
+        }
+      })
+
       .state('tab', {
         url: '/tab',
         abstract: true,
         templateUrl: 'templates/tabs.html'
       })
-
-      // Each tab has its own nav history stack:
 
       .state('tab.dash', {
         url: '/dash',
@@ -101,6 +132,6 @@ angular.module('starter',
       });
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/tab/dash');
+    $urlRouterProvider.otherwise('/validate');
 
   });
