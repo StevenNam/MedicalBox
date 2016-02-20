@@ -3,7 +3,7 @@ angular.module('starter.controllers', [])
   .controller('SignInCtrl', function ($log, $scope, $state, $auth, ErrorMessageService, ApiService, Validation) {
     $log.info('SignInCtrl');
 
-    $scope.signInForm = Validation.createSignForm();
+    $scope.signInForm = Validation.createSignInForm();
 
     $scope.signIn = function () {
       $log.log($scope.signInForm);
@@ -40,12 +40,87 @@ angular.module('starter.controllers', [])
           $state.go('tab.dash')
         },
         function (resp) {
-          ErrorMessageService.customErrorMessage('Sign In Fail', 'b');
+          ErrorMessageService.customErrorMessage('Sign In Fail', 'Unauthorized User');
         }, true)
     }
 
   })
 
+
+  .controller('SignUpCtrl', function ($log, $scope, $state, $auth, ErrorMessageService, ApiService, Validation) {
+    $log.info('SignUpCtrl');
+
+    $scope.signUpForm = Validation.createSignUpForm();
+
+    $scope.signUp = function () {
+      $log.log($scope.signUpForm);
+
+      var message = '';
+      if ($scope.signUpForm.email == '') {
+        message += '<li>Email Cant Empty</li><br/>';
+      }
+      else {
+        if (!$scope.signUpForm.email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+          message += '<li>Invalid Email Format</li><br/>';
+        }
+      }
+
+      if ($scope.signUpForm.password == '') {
+        message += '<li>Password Cant Empty</li><br/>';
+      }
+      else {
+        if ($scope.signUpForm.password.length < 8) {
+          message += '<li>Password Less Than 8 Characters</li><br/>';
+        }
+      }
+
+      if ($scope.signUpForm.confirmPassword == '') {
+        message += '<li>Confirm Password Cant Empty</li><br/>';
+      }
+      else {
+        if ($scope.signUpForm.confirmPassword != $scope.signUpForm.password) {
+          message += '<li>Confirm Password Not Match With Password</li><br/>';
+        }
+      }
+
+      if ($scope.signUpForm.name == '') {
+        message += '<li>Name Cant Empty</li><br/>';
+      }
+
+      if ($scope.signUpForm.age == '') {
+        message += '<li>Age Cant Empty</li><br/>';
+      }
+
+      if (message != '') {
+        ErrorMessageService.customErrorMessage('Sign Up Fail', message);
+        return;
+      }
+
+      ApiService.execute(
+        function () {
+          return $auth.submitRegistration($scope.signUpForm.getJSON());
+        },
+        function (resp) {
+          var signInForm = Validation.createSignInForm();
+          signInForm.email = $scope.signUpForm.email;
+          signInForm.password = $scope.signUpForm.password;
+          ApiService.execute(
+            function () {
+              return $auth.submitLogin(signInForm.getJSON());
+            },
+            function (resp) {
+              $state.go('tab.dash')
+            },
+            function (resp) {
+              ErrorMessageService.customErrorMessage('Sign In Fail', 'Unauthorized User');
+            }, true)
+        },
+        function (resp) {
+          ErrorMessageService.customErrorMessage('Sign Up Fail', 'b');
+        }, true)
+    }
+
+  })
 
   .controller('DashCtrl', function ($log, $scope) {
   })

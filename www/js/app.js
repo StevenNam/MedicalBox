@@ -86,6 +86,17 @@ angular.module('starter',
         }
       })
 
+      .state('signUp', {
+        url: '/signUp',
+        templateUrl: 'templates/sign-up.html',
+        controller: 'SignUpCtrl',
+        onEnter: function ($log) {
+          $log.info('Enter Page: sign-up.html');
+        }
+      })
+
+
+
       .state('tab', {
         url: '/tab',
         abstract: true,

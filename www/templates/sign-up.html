@@ -1,0 +1,28 @@
+<ion-view cache-view="false">
+
+  <ion-content class="padding" has-bouncing="false">
+    <div class="card app-title" style="padding-top: 15% !important;">
+      <h1 class="balanced" style="font-size: 12vw; text-align: center;">
+        Medical Box
+      </h1>
+    </div>
+
+    <label class="item item-input input-text">
+      <input type="text" placeholder="Email" ng-model="signUpForm.email">
+    </label>
+    <label class="item item-input input-text input-margin-top">
+      <input type="password" placeholder="Password" ng-model="signUpForm.password">
+    </label>
+    <label class="item item-input input-text input-margin-top">
+      <input type="password" placeholder="Confirm Password" ng-model="signUpForm.confirmPassword">
+    </label>
+    <label class="item item-input input-text input-margin-top">
+      <input type="text" placeholder="Name" ng-model="signUpForm.name">
+    </label>
+    <label class="item item-input input-text input-margin-top">
+      <input type="number" placeholder="Age" ng-model="signUpForm.age">
+    </label>
+    <button class="button button-block button-balanced input-button" ng-click="signUp()">Sign Up</button>
+    <a class="button button-block button-balanced input-button" href="#/signIn">Back</a>
+  </ion-content>
+</ion-view>

@@ -14,10 +14,33 @@ angular.module('starter.services', [])
       }
     }
 
-    return {
-      createSignForm: function () {
-        return new SignIn();
+    function SignUp () {
+      this.email = "";
+      this.password = "";
+      this.confirmPassword = "";
+      this.name = "";
+      this.age = "";
+
+      this.getJSON = function () {
+        return {
+          email: this.email,
+          password: this.password,
+          confirmPassword: this.confirmPassword,
+          name: this.name,
+          age: parseInt(this.age, 10)
+        }
       }
+    }
+
+    return {
+      createSignInForm: function () {
+        return new SignIn();
+      },
+
+      createSignUpForm: function () {
+        return new SignUp();
+      }
+
     }
   })
 
