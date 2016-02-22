@@ -9,8 +9,11 @@
       <ion-item class="item-icon-right" ng-repeat="medicalBox in medicalBoxes" ng-click="openMedicalBoxDetailModal($index)">
         <h2>{{medicalBox.name}}</h2>
         <p>Alert at: {{medicalBox.alert_time}}, {{medicalBox.frequency}}</p>
-        <ion-option-button class="button-positive" ng-click="openUpdateMedicalBoxModal($index, medicalBox)">
+        <ion-option-button class="button-positive" ng-click="openUpdateMedicalBoxModal($index)">
           Edit
+        </ion-option-button>
+        <ion-option-button class="button-assertive" ng-click="deleteMedicalBox($index)">
+          Delete
         </ion-option-button>
       </ion-item>
     </ion-list>

@@ -197,9 +197,9 @@ angular.module('starter.controllers', [])
       $scope.medicalBoxDetailModal.show();
     };
 
-    $scope.openUpdateMedicalBoxModal = function (index, object) {
+    $scope.openUpdateMedicalBoxModal = function (index) {
       $scope.index = index;
-      ApiService.execute(MedicalBox.getMedicalBoxById(object.id),
+      ApiService.execute(MedicalBox.getMedicalBoxById($scope.medicalBoxes[index].id),
         function (resp) {
           $scope.selectedMedicalBox = resp.data;
           date = new Date('2015-02-22 ' + $scope.selectedMedicalBox.alert_time + ':00');
@@ -252,7 +252,16 @@ angular.module('starter.controllers', [])
         }, null, true);
     }
 
+    $scope.deleteMedicalBox = function (index) {
+      ApiService.execute(MedicalBox.deleteMedicalBoxById($scope.medicalBoxes[index].id),
+        function (resp) {
+          $scope.medicalBoxes.splice(index, 1);
+        }, null, true);
+    }
+
   })
+
+
 
   .controller('ChatsCtrl', function ($scope, Chats) {
     // With the new view caching in Ionic, Controllers are only called

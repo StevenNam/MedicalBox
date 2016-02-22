@@ -92,6 +92,12 @@ angular.module('starter.services', [])
         return function () {
           return Restangular.one('medical_boxes', medicalBox.id).patch(medicalBox);
         }
+      },
+
+      deleteMedicalBoxById: function (id) {
+        return function () {
+          return Restangular.one('medical_boxes', id).remove();
+        }
       }
     }
 
