@@ -84,7 +84,13 @@ angular.module('starter.services', [])
 
       getMedicalBoxById: function (id) {
         return function () {
-          return Restangular.one('medical_boxes/' + id).get();
+          return Restangular.one('medical_boxes', id).get();
+        }
+      },
+
+      updateMedicalBoxById: function (medicalBox){
+        return function () {
+          return Restangular.one('medical_boxes', medicalBox.id).patch(medicalBox);
         }
       }
     }

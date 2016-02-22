@@ -135,9 +135,8 @@ angular.module('starter.controllers', [])
     $log.log('HomeCtrl');
 
     ApiService.execute(MedicalBox.getAllMedicalBox(), function (resp) {
-        $scope.medicalBoxes = resp.data.medical_boxes;
-        $log.log($scope.medicalBoxes);
-      }, null, true);
+      $scope.medicalBoxes = resp.data.medical_boxes;
+    }, null, true);
 
     $scope.timePickerObject = {
       inputEpochTime: 0,
@@ -151,6 +150,13 @@ angular.module('starter.controllers', [])
       animation: 'fade-in-scale'
     }).then(function (modal) {
       addMedicalBoxModal = modal;
+    });
+
+    $ionicModal.fromTemplateUrl('updateMedicalBox.html', {
+      scope: $scope,
+      animation: 'fade-in-scale'
+    }).then(function (modal) {
+      updateMedicalBoxModal = modal;
     });
 
     $ionicModal.fromTemplateUrl('medicalBoxDetail.html', {
@@ -191,6 +197,35 @@ angular.module('starter.controllers', [])
       $scope.medicalBoxDetailModal.show();
     };
 
+    $scope.openUpdateMedicalBoxModal = function (index, object) {
+      $scope.index = index;
+      ApiService.execute(MedicalBox.getMedicalBoxById(object.id),
+        function (resp) {
+          $scope.selectedMedicalBox = resp.data;
+          date = new Date('2015-02-22 ' + $scope.selectedMedicalBox.alert_time + ':00');
+          $scope.timePickerObject = {
+            inputEpochTime: date.getHours() * 60 * 60 + date.getMinutes() * 60,
+            callback: function (val) {    //Mandatory
+              if (val == undefined) {
+                return;
+              }
+              var selectedTime = new Date(val * 1000);
+              if (selectedTime.getUTCHours() < 10) {
+                $scope.selectedMedicalBox.alert_time = '0';
+              }
+              $scope.selectedMedicalBox.alert_time += selectedTime.getUTCHours() + ':';
+              if (selectedTime.getUTCMinutes() < 10) {
+                $scope.selectedMedicalBox.alert_time += '0';
+              }
+              $scope.selectedMedicalBox.alert_time += selectedTime.getUTCMinutes();
+              $scope.timePickerObject.inputEpochTime = val;
+            }
+          };
+        }, null, true);
+
+      updateMedicalBoxModal.show();
+    };
+
     $scope.addMedicalBox = function () {
       $log.log($scope.medicalBoxForm.getJSON());
 
@@ -205,16 +240,17 @@ angular.module('starter.controllers', [])
 
     };
 
-    /*var medicalBox = MedicalBox.createMedicalBoxForm();
-     medicalBox.alert_time = '12:00';
-     $log.log(medicalBox);
-     if(medicalBox.alert_time == undefined) {
-     return ErrorMessageService.customErrorMessage('Create Medical Box Fail', 'Alert Time Cant Empty');
-     }
-     //ApiService.execute(MedicalBox.createMedicalBox(medicalBox),
-     //function (resp) {
-     ApiService.execute(MedicalBox.getMedicalBoxById(1), null, null, true);
-     //}, null, true);*/
+    $scope.updateMedicalBox = function () {
+      if ($scope.selectedMedicalBox.name == '') {
+        return ErrorMessageService.customErrorMessage('Create Medical Box Fail', 'Box Name Cant Empty');
+      }
+
+      ApiService.execute(MedicalBox.updateMedicalBoxById($scope.selectedMedicalBox),
+        function (resp) {
+          $scope.medicalBoxes[$scope.index] = resp.data;
+          updateMedicalBoxModal.hide();
+        }, null, true);
+    }
 
   })
 
