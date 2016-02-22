@@ -3,6 +3,7 @@ angular.module('starter',
     'ionic',
     'ng-token-auth',
     'restangular',
+    'ionic-timepicker',
     'AppCore',
     'starter.controllers',
     'starter.services'
@@ -68,7 +69,7 @@ angular.module('starter',
               return $auth.validateUser();
             },
             function () {
-              $state.go('tab.dash');
+              $state.go('tab.home');
             },
             function () {
               $state.go('signIn');
@@ -96,22 +97,27 @@ angular.module('starter',
         }
       })
 
-
       .state('tab', {
         url: '/tab',
         abstract: true,
         templateUrl: 'templates/tabs.html'
       })
 
-      .state('tab.dash', {
-        url: '/dash',
+      .state('tab.home', {
+        url: '/home',
         views: {
           'tab-dash': {
-            templateUrl: 'templates/tab-dash.html',
-            controller: 'DashCtrl'
+            templateUrl: 'templates/home.html',
+            controller: 'HomeCtrl'
           }
+        },
+        onEnter: function ($log) {
+          $log.info('Enter Page: Home.html');
         }
       })
+
+
+
 
       .state('tab.chats', {
         url: '/chats',

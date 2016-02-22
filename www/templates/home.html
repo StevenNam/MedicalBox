@@ -1,0 +1,50 @@
+<ion-view cache-view="false">
+  <ion-header-bar class="bar-balanced">
+    <ion-title>My Medical Boxes</ion-title>
+    <button class="button button-icon ion-plus" ng-click="openAddMedicalBoxModal()"></button>
+  </ion-header-bar>
+
+  <ion-content class="has-header" has-bouncing="false">
+    <ion-list>
+      <ion-item class="item-icon-right" ng-repeat="medicalBox in medicalBoxes">
+        <h2>{{medicalBox.name}}</h2>
+        <p>Alert at: {{medicalBox.alert_time}}, {{medicalBox.frequency}}</p>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+
+  <script id="addMedicalBox.html" type="text/ng-template">
+    <ion-modal-view>
+      <ion-header-bar class="bar-balanced">
+        <h1 class="title">Add New Medical Box</h1>
+      </ion-header-bar>
+      <ion-content class="padding has-header">
+        <label class="item item-input input-rounded-corner">
+          <span class="input-label">Box Name</span>
+          <input type="text" ng-model="medicalBoxForm.name">
+        </label>
+
+        <ionic-timepicker input-obj="timePickerObject">
+          <label class="item item-input input-rounded-corner input-margin-top">
+            <span class="input-label">Alert Time</span>
+            <input type="text" ng-model="medicalBoxForm.alert_time">
+          </label>
+        </ionic-timepicker>
+
+        <label class="item item-input item-select input-rounded-corner input-margin-top">
+          <div class="input-label">
+            Frequency
+          </div>
+          <select ng-model="medicalBoxForm.frequency">
+            <option>Once</option>
+            <option>Every Day</option>
+          </select>
+        </label>
+
+      </ion-content>
+      <ion-footer-bar class="bar-balanced item-input-inset">
+        <button class="button button-block button-clear" ng-click="addMedicalBox()">Confirm</button>
+      </ion-footer-bar>
+    </ion-modal-view>
+  </script>
+</ion-view>

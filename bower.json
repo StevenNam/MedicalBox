@@ -4,6 +4,8 @@
   "devDependencies": {
     "ionic": "driftyco/ionic-bower#1.2.4",
     "ng-token-auth": "^0.0.28",
-    "restangular": "^1.5.2"
+    "restangular": "^1.5.2",
+    "ionic-nifty-modal": "*",
+    "ionic-timepicker": "^0.4.0"
   }
 }

@@ -3,7 +3,7 @@
   box-shadow: none !important;
 }
 
-.input-text {
+.input-rounded-corner {
   border-bottom-left-radius: 5pt;
   border-top-left-radius: 5pt;
   border-bottom-right-radius: 5pt;

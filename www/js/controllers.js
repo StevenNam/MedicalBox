@@ -42,7 +42,7 @@ angular.module('starter.controllers', [])
           return $auth.submitLogin($scope.signInForm.getJSON());
         },
         function (resp) {
-          $state.go('tab.dash')
+          $state.go('tab.home')
         },
         function (resp) {
           ErrorMessageService.customErrorMessage('Sign In Fail', 'Unauthorized User');
@@ -118,7 +118,7 @@ angular.module('starter.controllers', [])
               return $auth.submitLogin(signInForm.getJSON());
             },
             function (resp) {
-              $state.go('tab.dash')
+              $state.go('tab.home')
             },
             function (resp) {
               ErrorMessageService.customErrorMessage('Sign In Fail', 'Unauthorized User');
@@ -131,12 +131,80 @@ angular.module('starter.controllers', [])
 
   })
 
+  .controller('HomeCtrl', function ($log, $scope, $ionicModal, ErrorMessageService, ApiService, MedicalBox) {
+    $log.log('HomeCtrl');
 
+    ApiService.execute(MedicalBox.getAllMedicalBox(),
+      function (resp) {
+        $scope.medicalBoxes = resp.data.medical_boxes;
+        $log.log($scope.medicalBoxes);
+      });
 
+    $scope.timePickerObject = {
+      inputEpochTime: 0,
+      titleLabel: 'Select Alert Time',
+      setButtonType: 'button-balanced',  //Optional
+      closeButtonType: 'button-positive',  //Optional
+    };
 
+    $ionicModal.fromTemplateUrl('addMedicalBox.html', {
+      scope: $scope,
+      animation: 'fade-in-scale'
+    }).then(function (modal) {
+      addMedicalBoxModal = modal;
+    });
 
+    $scope.openAddMedicalBoxModal = function () {
+      $scope.medicalBoxForm = MedicalBox.createMedicalBoxForm();
 
-  .controller('DashCtrl', function ($log, $scope) {
+      $scope.timePickerObject = {
+        inputEpochTime: 0,
+        callback: function (val) {    //Mandatory
+          if (val == undefined) {
+            return;
+          }
+          var selectedTime = new Date(val * 1000);
+          if (selectedTime.getUTCHours() < 10) {
+            $scope.medicalBoxForm.alert_time = '0';
+          }
+          $scope.medicalBoxForm.alert_time += selectedTime.getUTCHours() + ':';
+          if (selectedTime.getUTCMinutes() < 10) {
+            $scope.medicalBoxForm.alert_time += '0';
+          }
+          $scope.medicalBoxForm.alert_time += selectedTime.getUTCMinutes();
+          $scope.timePickerObject.inputEpochTime = val;
+          $log.log($scope.medicalBoxForm);
+        }
+      };
+
+      addMedicalBoxModal.show();
+    };
+
+    $scope.addMedicalBox = function () {
+      $log.log($scope.medicalBoxForm.getJSON());
+
+      if ($scope.medicalBoxForm.name == '') {
+        return ErrorMessageService.customErrorMessage('Create Medical Box Fail', 'Box Name Cant Empty');
+      }
+
+      ApiService.execute(MedicalBox.createMedicalBox($scope.medicalBoxForm.getJSON()),
+        function (resp) {
+          addMedicalBoxModal.hide();
+        }, null, true);
+
+    };
+
+    /*var medicalBox = MedicalBox.createMedicalBoxForm();
+     medicalBox.alert_time = '12:00';
+     $log.log(medicalBox);
+     if(medicalBox.alert_time == undefined) {
+     return ErrorMessageService.customErrorMessage('Create Medical Box Fail', 'Alert Time Cant Empty');
+     }
+     //ApiService.execute(MedicalBox.createMedicalBox(medicalBox),
+     //function (resp) {
+     ApiService.execute(MedicalBox.getMedicalBoxById(1), null, null, true);
+     //}, null, true);*/
+
   })
 
   .controller('ChatsCtrl', function ($scope, Chats) {
@@ -162,4 +230,45 @@ angular.module('starter.controllers', [])
     $scope.settings = {
       enableFriends: true
     };
-  });
+  })
+
+  .directive('standardTimeNoMeridian', function () {
+    return {
+      restrict: 'AE',
+      replace: true,
+      scope: {
+        etime: '=etime'
+      },
+      template: "<strong>{{stime}}</strong>",
+      link: function (scope, elem, attrs) {
+
+        scope.stime = epochParser(scope.etime, 'time');
+
+        function prependZero(param) {
+          if (String(param).length < 2) {
+            return "0" + String(param);
+          }
+          return param;
+        }
+
+        function epochParser(val, opType) {
+          if (val === null) {
+            return "00:00";
+          } else {
+            if (opType === 'time') {
+              var hours = parseInt(val / 3600);
+              var minutes = (val / 60) % 60;
+
+              return (prependZero(hours) + ":" + prependZero(minutes));
+            }
+          }
+        }
+
+        scope.$watch('etime', function (newValue, oldValue) {
+          scope.stime = epochParser(scope.etime, 'time');
+        });
+
+      }
+    };
+  })
+;

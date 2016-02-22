@@ -49,6 +49,48 @@ angular.module('starter.services', [])
     }
   })
 
+  .factory('MedicalBox', function (Restangular) {
+
+    function MedicalBox () {
+      this.name = 'New Medical Box';
+      this.alert_time = '00:00';
+      this.frequency = 'Once';
+
+      this.getJSON = function () {
+        return {
+          name: this.name,
+          alert_time: this.alert_time,
+          frequency: this.frequency
+        }
+      }
+    }
+
+    return {
+      createMedicalBoxForm: function () {
+        return new MedicalBox();
+      },
+
+      createMedicalBox: function (medicalBox) {
+        return function () {
+          return Restangular.one('medical_boxes').customPOST(medicalBox);
+        }
+      },
+
+      getAllMedicalBox: function () {
+        return function () {
+          return Restangular.one('medical_boxes').get();
+        }
+      },
+
+      getMedicalBoxById: function (id) {
+        return function () {
+          return Restangular.one('medical_boxes/' + id).get();
+        }
+      }
+    }
+
+  })
+
   .factory('Chats', function () {
     // Might use a resource here that returns a JSON array
 
