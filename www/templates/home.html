@@ -6,7 +6,7 @@
 
   <ion-content class="has-header" has-bouncing="false">
     <ion-list>
-      <ion-item class="item-icon-right" ng-repeat="medicalBox in medicalBoxes">
+      <ion-item class="item-icon-right" ng-repeat="medicalBox in medicalBoxes" ng-click="openMedicalBoxDetailModal($index)">
         <h2>{{medicalBox.name}}</h2>
         <p>Alert at: {{medicalBox.alert_time}}, {{medicalBox.frequency}}</p>
       </ion-item>
@@ -45,6 +45,27 @@
       <ion-footer-bar class="bar-balanced item-input-inset">
         <button class="button button-block button-clear" ng-click="addMedicalBox()">Confirm</button>
       </ion-footer-bar>
+    </ion-modal-view>
+  </script>
+  <script id="medicalBoxDetail.html" type="text/ng-template">
+    <ion-modal-view on-hold="medicalBoxDetailModal.hide()">
+      <ion-header-bar class="bar-balanced">
+        <h1 class="title">{{selectedMedicalBox.name}}</h1>
+      </ion-header-bar>
+      <ion-content class="padding has-header">
+          <label class="item item-input input-rounded-corner">
+            <span class="input-label">Alert Time</span>
+            {{selectedMedicalBox.alert_time}}
+          </label>
+
+        <label class="item item-input input-rounded-corner input-margin-top">
+          <div class="input-label">
+            Frequency
+          </div>
+          {{selectedMedicalBox.frequency}}
+        </label>
+
+      </ion-content>
     </ion-modal-view>
   </script>
 </ion-view>

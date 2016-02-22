@@ -134,11 +134,10 @@ angular.module('starter.controllers', [])
   .controller('HomeCtrl', function ($log, $scope, $ionicModal, ErrorMessageService, ApiService, MedicalBox) {
     $log.log('HomeCtrl');
 
-    ApiService.execute(MedicalBox.getAllMedicalBox(),
-      function (resp) {
+    ApiService.execute(MedicalBox.getAllMedicalBox(), function (resp) {
         $scope.medicalBoxes = resp.data.medical_boxes;
         $log.log($scope.medicalBoxes);
-      });
+      }, null, true);
 
     $scope.timePickerObject = {
       inputEpochTime: 0,
@@ -152,6 +151,13 @@ angular.module('starter.controllers', [])
       animation: 'fade-in-scale'
     }).then(function (modal) {
       addMedicalBoxModal = modal;
+    });
+
+    $ionicModal.fromTemplateUrl('medicalBoxDetail.html', {
+      scope: $scope,
+      animation: 'fade-in-scale'
+    }).then(function (modal) {
+      $scope.medicalBoxDetailModal = modal;
     });
 
     $scope.openAddMedicalBoxModal = function () {
@@ -178,6 +184,11 @@ angular.module('starter.controllers', [])
       };
 
       addMedicalBoxModal.show();
+    };
+
+    $scope.openMedicalBoxDetailModal = function (id) {
+      $scope.selectedMedicalBox = $scope.medicalBoxes[id];
+      $scope.medicalBoxDetailModal.show();
     };
 
     $scope.addMedicalBox = function () {
