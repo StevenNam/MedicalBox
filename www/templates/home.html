@@ -6,7 +6,7 @@
 
   <ion-content class="has-header" has-bouncing="false">
     <ion-list>
-      <ion-item class="item-icon-right" ng-repeat="medicalBox in medicalBoxes" ng-click="openMedicalBoxDetailModal($index)">
+      <ion-item class="item-icon-right" ng-repeat="medicalBox in medicalBoxes" ng-click="openMedicalBoxDetailModal($index)" on-hold="copyMedicalBox(medicalBox.id)">
         <h2>{{medicalBox.name}}</h2>
         <p>Alert at: {{medicalBox.alert_time}}, {{medicalBox.frequency}}</p>
         <ion-option-button class="button-positive" ng-click="openUpdateMedicalBoxModal($index)">

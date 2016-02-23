@@ -98,6 +98,12 @@ angular.module('starter.services', [])
         return function () {
           return Restangular.one('medical_boxes', id).remove();
         }
+      },
+
+      copyMedicalBoxById: function (id) {
+        return function () {
+          return Restangular.one('medical_boxes', id).one('copy').customPOST();
+        }
       }
     }
 

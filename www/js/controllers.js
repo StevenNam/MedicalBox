@@ -235,9 +235,9 @@ angular.module('starter.controllers', [])
 
       ApiService.execute(MedicalBox.createMedicalBox($scope.medicalBoxForm.getJSON()),
         function (resp) {
+          $scope.medicalBoxes.push(resp.data);
           addMedicalBoxModal.hide();
         }, null, true);
-
     };
 
     $scope.updateMedicalBox = function () {
@@ -259,6 +259,13 @@ angular.module('starter.controllers', [])
         }, null, true);
     }
 
+    $scope.copyMedicalBox = function (id) {
+      ApiService.execute(MedicalBox.copyMedicalBoxById(id),
+        function (resp) {
+          $scope.medicalBoxes.push(resp.data);
+          addMedicalBoxModal.hide();
+        }, null, true);
+    }
   })
 
 
