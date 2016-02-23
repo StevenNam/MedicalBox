@@ -6,7 +6,7 @@
 
   <ion-content class="has-header" has-bouncing="false">
     <ion-list>
-      <ion-item class="item-icon-right" ng-repeat="medicalBox in medicalBoxes" ng-click="openMedicalBoxDetailModal($index)" on-hold="copyMedicalBox(medicalBox.id)">
+      <ion-item ng-repeat="medicalBox in medicalBoxes" ng-click="openMedicalBoxDetailModal($index)" on-hold="copyMedicalBox(medicalBox.id)">
         <h2>{{medicalBox.name}}</h2>
         <p>Alert at: {{medicalBox.alert_time}}, {{medicalBox.frequency}}</p>
         <ion-option-button class="button-positive" ng-click="openUpdateMedicalBoxModal($index)">
@@ -22,6 +22,7 @@
   <script id="addMedicalBox.html" type="text/ng-template">
     <ion-modal-view>
       <ion-header-bar class="bar-balanced">
+        <button class="button button-icon ion-ios-arrow-back" ng-click="addMedicalBoxModal.hide()"></button>
         <h1 class="title">Add New Medical Box</h1>
       </ion-header-bar>
       <ion-content class="padding has-header">
@@ -56,6 +57,7 @@
   <script id="updateMedicalBox.html" type="text/ng-template">
     <ion-modal-view>
       <ion-header-bar class="bar-balanced">
+        <button class="button button-icon ion-ios-arrow-back" ng-click="updateMedicalBoxModal.hide()"></button>
         <h1 class="title">Edit Medical Box</h1>
       </ion-header-bar>
       <ion-content class="padding has-header">
@@ -88,9 +90,11 @@
     </ion-modal-view>
   </script>
   <script id="medicalBoxDetail.html" type="text/ng-template">
-    <ion-modal-view on-hold="medicalBoxDetailModal.hide()">
+    <ion-modal-view>
       <ion-header-bar class="bar-balanced">
+        <button class="button button-icon ion-ios-arrow-back" ng-click="medicalBoxDetailModal.hide()"></button>
         <h1 class="title">{{selectedMedicalBox.name}}</h1>
+        <button class="button button-icon ion-plus" ng-click="openAddDrugModal()"></button>
       </ion-header-bar>
       <ion-content class="padding has-header">
           <label class="item item-input input-rounded-corner">
@@ -105,7 +109,38 @@
           {{selectedMedicalBox.frequency}}
         </label>
 
+        <ion-list class="input-margin-top">
+          <ion-item ng-class="selectedMedicalBox.drugs.length == 1 ? 'input-rounded-corner input-margin-top' : ($index == 0 ? 'input-rounded-corner-top input-margin-top' : ($index == selectedMedicalBox.drugs.length - 1 ? 'input-rounded-corner-bottom' : ''))"
+                    ng-repeat="drug in selectedMedicalBox.drugs">
+            <h2>{{drug.name}}</h2>
+            <p>Amount: {{drug.amount}}</p>
+          </ion-item>
+        </ion-list>
+
       </ion-content>
+    </ion-modal-view>
+  </script>
+  <script id="addDrug.html" type="text/ng-template">
+    <ion-modal-view>
+      <ion-header-bar class="bar-balanced">
+        <button class="button button-icon ion-ios-arrow-back" ng-click="addDrugModal.hide()"></button>
+        <h1 class="title">Add Drug</h1>
+      </ion-header-bar>
+      <ion-content class="padding has-header">
+        <label class="item item-input input-rounded-corner">
+          <span class="input-label">Drug Name</span>
+          <input type="text" ng-model="drugForm.name">
+        </label>
+
+        <label class="item item-input input-rounded-corner input-margin-top">
+          <span class="input-label">Amount</span>
+          <input type="number" ng-model="drugForm.amount">
+        </label>
+
+      </ion-content>
+      <ion-footer-bar class="bar-balanced item-input-inset">
+        <button class="button button-block button-clear" ng-click="addDrug()">Confirm</button>
+      </ion-footer-bar>
     </ion-modal-view>
   </script>
 </ion-view>

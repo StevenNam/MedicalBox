@@ -9,6 +9,14 @@
   border-bottom-right-radius: 5pt;
   border-top-right-radius: 5pt;
 }
+.input-rounded-corner-top {
+  border-top-left-radius: 5pt;
+  border-top-right-radius: 5pt;
+}
+.input-rounded-corner-bottom {
+  border-bottom-left-radius: 5pt;
+  border-bottom-right-radius: 5pt;
+}
 .input-margin-top {
   margin-top: 10pt;
 }

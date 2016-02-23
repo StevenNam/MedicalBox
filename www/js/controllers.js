@@ -131,7 +131,7 @@ angular.module('starter.controllers', [])
 
   })
 
-  .controller('HomeCtrl', function ($log, $scope, $ionicModal, ErrorMessageService, ApiService, MedicalBox) {
+  .controller('HomeCtrl', function ($log, $scope, $ionicModal, ErrorMessageService, ApiService, MedicalBox, Drug) {
     $log.log('HomeCtrl');
 
     ApiService.execute(MedicalBox.getAllMedicalBox(), function (resp) {
@@ -149,14 +149,14 @@ angular.module('starter.controllers', [])
       scope: $scope,
       animation: 'fade-in-scale'
     }).then(function (modal) {
-      addMedicalBoxModal = modal;
+      $scope.addMedicalBoxModal = modal;
     });
 
     $ionicModal.fromTemplateUrl('updateMedicalBox.html', {
       scope: $scope,
       animation: 'fade-in-scale'
     }).then(function (modal) {
-      updateMedicalBoxModal = modal;
+      $scope.updateMedicalBoxModal = modal;
     });
 
     $ionicModal.fromTemplateUrl('medicalBoxDetail.html', {
@@ -164,6 +164,13 @@ angular.module('starter.controllers', [])
       animation: 'fade-in-scale'
     }).then(function (modal) {
       $scope.medicalBoxDetailModal = modal;
+    });
+
+    $ionicModal.fromTemplateUrl('addDrug.html', {
+      scope: $scope,
+      animation: 'fade-in-scale'
+    }).then(function (modal) {
+      $scope.addDrugModal = modal;
     });
 
     $scope.openAddMedicalBoxModal = function () {
@@ -179,6 +186,9 @@ angular.module('starter.controllers', [])
           if (selectedTime.getUTCHours() < 10) {
             $scope.medicalBoxForm.alert_time = '0';
           }
+          else {
+            $scope.medicalBoxForm.alert_time = '';
+          }
           $scope.medicalBoxForm.alert_time += selectedTime.getUTCHours() + ':';
           if (selectedTime.getUTCMinutes() < 10) {
             $scope.medicalBoxForm.alert_time += '0';
@@ -189,11 +199,12 @@ angular.module('starter.controllers', [])
         }
       };
 
-      addMedicalBoxModal.show();
+      $scope.addMedicalBoxModal.show();
     };
 
     $scope.openMedicalBoxDetailModal = function (id) {
       $scope.selectedMedicalBox = $scope.medicalBoxes[id];
+      $log.log('Selected Medical Box: ', $scope.selectedMedicalBox);
       $scope.medicalBoxDetailModal.show();
     };
 
@@ -213,6 +224,9 @@ angular.module('starter.controllers', [])
               if (selectedTime.getUTCHours() < 10) {
                 $scope.selectedMedicalBox.alert_time = '0';
               }
+              else {
+                $scope.selectedMedicalBox.alert_time = '';
+              }
               $scope.selectedMedicalBox.alert_time += selectedTime.getUTCHours() + ':';
               if (selectedTime.getUTCMinutes() < 10) {
                 $scope.selectedMedicalBox.alert_time += '0';
@@ -223,7 +237,13 @@ angular.module('starter.controllers', [])
           };
         }, null, true);
 
-      updateMedicalBoxModal.show();
+      $scope.updateMedicalBoxModal.show();
+    };
+
+    $scope.openAddDrugModal = function () {
+      $scope.drugForm = Drug.createDrugForm();
+
+      $scope.addDrugModal.show();
     };
 
     $scope.addMedicalBox = function () {
@@ -236,7 +256,7 @@ angular.module('starter.controllers', [])
       ApiService.execute(MedicalBox.createMedicalBox($scope.medicalBoxForm.getJSON()),
         function (resp) {
           $scope.medicalBoxes.push(resp.data);
-          addMedicalBoxModal.hide();
+          $scope.addMedicalBoxModal.hide();
         }, null, true);
     };
 
@@ -248,22 +268,39 @@ angular.module('starter.controllers', [])
       ApiService.execute(MedicalBox.updateMedicalBoxById($scope.selectedMedicalBox),
         function (resp) {
           $scope.medicalBoxes[$scope.index] = resp.data;
-          updateMedicalBoxModal.hide();
+          $scope.updateMedicalBoxModal.hide();
         }, null, true);
-    }
+    };
 
     $scope.deleteMedicalBox = function (index) {
       ApiService.execute(MedicalBox.deleteMedicalBoxById($scope.medicalBoxes[index].id),
         function (resp) {
           $scope.medicalBoxes.splice(index, 1);
         }, null, true);
-    }
+    };
 
     $scope.copyMedicalBox = function (id) {
       ApiService.execute(MedicalBox.copyMedicalBoxById(id),
         function (resp) {
           $scope.medicalBoxes.push(resp.data);
-          addMedicalBoxModal.hide();
+        }, null, true);
+    };
+
+    $scope.addDrug = function () {
+      $log.log($scope.drugForm.getJSON());
+
+      if($scope.drugForm.name == '') {
+        return ErrorMessageService.customErrorMessage('Select Drug Fail', 'Drug Name Cant Empty');
+      }
+
+      if($scope.drugForm.amount == 0) {
+        return ErrorMessageService.customErrorMessage('Select Drug Fail', 'Amount Cant Be Zero');
+      }
+
+      ApiService.execute(Drug.createDrug($scope.selectedMedicalBox.id, $scope.drugForm.getJSON()),
+        function (resp) {
+          $scope.selectedMedicalBox.drugs.push(resp.data);
+          $scope.addDrugModal.hide();
         }, null, true);
     }
   })
@@ -285,9 +322,9 @@ angular.module('starter.controllers', [])
     };
   })
 
-  .controller('ChatDetailCtrl', function ($scope, $stateParams, Chats) {
+  /*.controller('ChatDetailCtrl', function ($scope, $stateParams, Chats) {
     $scope.chat = Chats.get($stateParams.chatId);
-  })
+  })*/
 
   .controller('AccountCtrl', function ($scope) {
     $scope.settings = {

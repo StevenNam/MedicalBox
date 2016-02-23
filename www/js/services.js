@@ -7,7 +7,7 @@ angular.module('starter.services', [])
    */
   .factory('Validation', function () {
 
-    function SignIn () {
+    function SignIn() {
       this.email = "";
       this.password = "";
 
@@ -19,7 +19,7 @@ angular.module('starter.services', [])
       }
     }
 
-    function SignUp () {
+    function SignUp() {
       this.email = "";
       this.password = "";
       this.confirmPassword = "";
@@ -51,7 +51,7 @@ angular.module('starter.services', [])
 
   .factory('MedicalBox', function (Restangular) {
 
-    function MedicalBox () {
+    function MedicalBox() {
       this.name = 'New Medical Box';
       this.alert_time = '00:00';
       this.frequency = 'Once';
@@ -88,7 +88,7 @@ angular.module('starter.services', [])
         }
       },
 
-      updateMedicalBoxById: function (medicalBox){
+      updateMedicalBoxById: function (medicalBox) {
         return function () {
           return Restangular.one('medical_boxes', medicalBox.id).patch(medicalBox);
         }
@@ -109,7 +109,42 @@ angular.module('starter.services', [])
 
   })
 
-  .factory('Chats', function () {
+
+  .factory('Drug', function (Restangular) {
+
+    function DrugForm() {
+      this.name = undefined;
+      this.amount = 0;
+
+      this.getJSON = function () {
+        return {
+          name: this.name,
+          amount: this.amount
+        }
+      }
+    }
+
+    return {
+      createDrugForm: function () {
+        return new DrugForm();
+      },
+
+      createDrug: function (medicalBoxId, drug) {
+        return function () {
+          return Restangular.one('medical_boxes', medicalBoxId).one('drugs').customPOST(drug);
+        }
+      },
+
+      deleteDrugById: function (medicalBoxId,id) {
+        return function () {
+          return Restangular.one('medical_boxes', medicalBoxId).one('drugs', id).remove();
+        }
+      }
+    }
+
+  })
+;
+  /*.factory('Chats', function () {
     // Might use a resource here that returns a JSON array
 
     // Some fake testing data
@@ -156,4 +191,4 @@ angular.module('starter.services', [])
         return null;
       }
     };
-  });
+  });*/

@@ -119,7 +119,7 @@ angular.module('starter',
 
 
 
-      .state('tab.chats', {
+      /*.state('tab.chats', {
         url: '/chats',
         views: {
           'tab-chats': {
@@ -136,7 +136,7 @@ angular.module('starter',
             controller: 'ChatDetailCtrl'
           }
         }
-      })
+      })*/
 
       .state('tab.account', {
         url: '/account',
