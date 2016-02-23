@@ -302,6 +302,13 @@ angular.module('starter.controllers', [])
           $scope.selectedMedicalBox.drugs.push(resp.data);
           $scope.addDrugModal.hide();
         }, null, true);
+    };
+
+    $scope.deleteDrug = function (index) {
+      ApiService.execute(Drug.deleteDrugById($scope.selectedMedicalBox.id, $scope.selectedMedicalBox.drugs[index].id),
+      function (resp) {
+        $scope.selectedMedicalBox.drugs.splice(index, 1);
+      }, null, true);
     }
   })
 

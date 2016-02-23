@@ -111,7 +111,7 @@
 
         <ion-list class="input-margin-top">
           <ion-item ng-class="selectedMedicalBox.drugs.length == 1 ? 'input-rounded-corner input-margin-top' : ($index == 0 ? 'input-rounded-corner-top input-margin-top' : ($index == selectedMedicalBox.drugs.length - 1 ? 'input-rounded-corner-bottom' : ''))"
-                    ng-repeat="drug in selectedMedicalBox.drugs">
+                    ng-repeat="drug in selectedMedicalBox.drugs" on-hold="deleteDrug($index)">
             <h2>{{drug.name}}</h2>
             <p>Amount: {{drug.amount}}</p>
           </ion-item>
