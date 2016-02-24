@@ -6,8 +6,10 @@
 
   <ion-content class="has-header" has-bouncing="false">
     <ion-list>
-      <ion-item ng-repeat="medicalBox in medicalBoxes" ng-click="openMedicalBoxDetailModal($index)" on-hold="copyMedicalBox(medicalBox.id)">
+      <ion-item ng-repeat="medicalBox in medicalBoxes" ng-click="openMedicalBoxDetailModal($index)"
+                on-hold="copyMedicalBox(medicalBox.id)">
         <h2>{{medicalBox.name}}</h2>
+
         <p>Alert at: {{medicalBox.alert_time}}, {{medicalBox.frequency}}</p>
         <ion-option-button class="button-positive" ng-click="openUpdateMedicalBoxModal($index)">
           Edit
@@ -34,7 +36,7 @@
         <ionic-timepicker input-obj="timePickerObject">
           <label class="item item-input input-rounded-corner input-margin-top">
             <span class="input-label">Alert Time</span>
-            <input type="text" ng-model="medicalBoxForm.alert_time">
+            <input class="input-readonly" type="text" ng-model="medicalBoxForm.alert_time" readonly="readonly">
           </label>
         </ionic-timepicker>
 
@@ -69,7 +71,7 @@
         <ionic-timepicker input-obj="timePickerObject">
           <label class="item item-input input-rounded-corner input-margin-top">
             <span class="input-label">Alert Time</span>
-            <input type="text" ng-model="selectedMedicalBox.alert_time">
+            <input class="input-readonly" type="text" ng-model="selectedMedicalBox.alert_time" readonly="readonly">
           </label>
         </ionic-timepicker>
 
@@ -97,10 +99,10 @@
         <button class="button button-icon ion-plus" ng-click="openAddDrugModal()"></button>
       </ion-header-bar>
       <ion-content class="padding has-header">
-          <label class="item item-input input-rounded-corner">
-            <span class="input-label">Alert Time</span>
-            {{selectedMedicalBox.alert_time}}
-          </label>
+        <label class="item item-input input-rounded-corner">
+          <span class="input-label">Alert Time</span>
+          {{selectedMedicalBox.alert_time}}
+        </label>
 
         <label class="item item-input input-rounded-corner input-margin-top">
           <div class="input-label">
@@ -110,9 +112,11 @@
         </label>
 
         <ion-list class="input-margin-top">
-          <ion-item ng-class="selectedMedicalBox.drugs.length == 1 ? 'input-rounded-corner input-margin-top' : ($index == 0 ? 'input-rounded-corner-top input-margin-top' : ($index == selectedMedicalBox.drugs.length - 1 ? 'input-rounded-corner-bottom' : ''))"
-                    ng-repeat="drug in selectedMedicalBox.drugs" on-hold="deleteDrug($index)">
+          <ion-item
+            ng-class="selectedMedicalBox.drugs.length == 1 ? 'input-rounded-corner input-margin-top' : ($index == 0 ? 'input-rounded-corner-top input-margin-top' : ($index == selectedMedicalBox.drugs.length - 1 ? 'input-rounded-corner-bottom' : ''))"
+            ng-repeat="drug in selectedMedicalBox.drugs" on-hold="deleteDrug($index)">
             <h2>{{drug.name}}</h2>
+
             <p>Amount: {{drug.amount}}</p>
           </ion-item>
         </ion-list>
@@ -129,7 +133,8 @@
       <ion-content class="padding has-header">
         <label class="item item-input input-rounded-corner">
           <span class="input-label">Drug Name</span>
-          <input type="text" ng-model="drugForm.name">
+          <input class="input-readonly" type="text" ng-model="drugForm.name" readonly="readonly"
+                 ng-click="openSelectDrugModal()"></label>
         </label>
 
         <label class="item item-input input-rounded-corner input-margin-top">
@@ -141,6 +146,27 @@
       <ion-footer-bar class="bar-balanced item-input-inset">
         <button class="button button-block button-clear" ng-click="addDrug()">Confirm</button>
       </ion-footer-bar>
+    </ion-modal-view>
+  </script>
+  <script id="selectDrug.html" type="text/ng-template">
+    <ion-modal-view>
+      <ion-header-bar class="bar-balanced">
+        <button class="button button-icon ion-ios-arrow-back" ng-click="selectDrugModal.hide()"></button>
+        <h1 class="title">Select Drug</h1>
+      </ion-header-bar>
+      <ion-content class="padding">
+        <label class="item item-input input-rounded-corner">
+          <i class="icon ion-search placeholder-icon"></i>
+          <input type="text" placeholder="Search" ng-model="search.query" ng-change="searchDrugByName()">
+        </label>
+        <ion-list>
+          <ion-item
+            ng-class="$index == 0 ? 'input-rounded-corner-top input-margin-top item-text-wrap' : ($index == drugs.length - 1 ? 'input-rounded-corner-bottom item-text-wrap' : 'item-text-wrap')"
+            ng-repeat="drug in drugs" ng-click="selectDrug(drug.term)">
+            {{drug.term}}
+          </ion-item>
+        </ion-list>
+      </ion-content>
     </ion-modal-view>
   </script>
 </ion-view>

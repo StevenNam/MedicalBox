@@ -131,12 +131,15 @@ angular.module('starter.controllers', [])
 
   })
 
-  .controller('HomeCtrl', function ($log, $scope, $ionicModal, ErrorMessageService, ApiService, MedicalBox, Drug) {
+  .controller('HomeCtrl', function ($log, $scope, $ionicModal, $timeout, ErrorMessageService, ApiService, MedicalBox, Drug, OpenFDA) {
     $log.log('HomeCtrl');
 
     ApiService.execute(MedicalBox.getAllMedicalBox(), function (resp) {
       $scope.medicalBoxes = resp.data.medical_boxes;
     }, null, true);
+
+
+    ApiService.execute(OpenFDA.searchReactionByGenericName('CHLORPHENIRAMINE mALEATE'));
 
     $scope.timePickerObject = {
       inputEpochTime: 0,
@@ -144,6 +147,15 @@ angular.module('starter.controllers', [])
       setButtonType: 'button-balanced',  //Optional
       closeButtonType: 'button-positive',  //Optional
     };
+
+    /**
+     * Timer 設定
+     */
+    $scope.search = {
+      query: ''
+    };
+    var typingTimer = null;                                                                                           // timer identifier
+    var doneTypingInterval = 1000;                                                                                    // time in ms, 3 second for example
 
     $ionicModal.fromTemplateUrl('addMedicalBox.html', {
       scope: $scope,
@@ -171,6 +183,13 @@ angular.module('starter.controllers', [])
       animation: 'fade-in-scale'
     }).then(function (modal) {
       $scope.addDrugModal = modal;
+    });
+
+    $ionicModal.fromTemplateUrl('selectDrug.html', {
+      scope: $scope,
+      animation: 'fade-in-scale'
+    }).then(function (modal) {
+      $scope.selectDrugModal = modal;
     });
 
     $scope.openAddMedicalBoxModal = function () {
@@ -246,6 +265,11 @@ angular.module('starter.controllers', [])
       $scope.addDrugModal.show();
     };
 
+    $scope.openSelectDrugModal = function () {
+      $scope.query = '';
+      $scope.selectDrugModal.show();
+    };
+
     $scope.addMedicalBox = function () {
       $log.log($scope.medicalBoxForm.getJSON());
 
@@ -289,7 +313,7 @@ angular.module('starter.controllers', [])
     $scope.addDrug = function () {
       $log.log($scope.drugForm.getJSON());
 
-      if($scope.drugForm.name == '') {
+      if($scope.drugForm.name == '' || $scope.drugForm.name == undefined) {
         return ErrorMessageService.customErrorMessage('Select Drug Fail', 'Drug Name Cant Empty');
       }
 
@@ -309,7 +333,36 @@ angular.module('starter.controllers', [])
       function (resp) {
         $scope.selectedMedicalBox.drugs.splice(index, 1);
       }, null, true);
-    }
+    };
+
+    $scope.searchDrugByName = function () {
+      if (typingTimer != null) {
+        $timeout.cancel(typingTimer);                                                                                 // 清除timer
+      }
+
+      typingTimer = $timeout(
+        function () {
+          $log.log($scope.search.query);
+
+          ApiService.execute(OpenFDA.searchDrugsByGenericName($scope.search.query),
+            function (resp) {
+              $scope.drugs = resp.data.results;
+              $log.log($scope.drugs);
+            },
+            function (resp) {
+              if(resp.status == 404) {
+                ErrorMessageService.customErrorMessage('Search Drug By Name', 'No match found');
+              }
+            })
+
+        }, doneTypingInterval
+      );
+    };
+
+    $scope.selectDrug = function (drugName) {
+      $scope.drugForm.name = drugName;
+      $scope.selectDrugModal.hide();
+    };
   })
 
 
