@@ -3,6 +3,7 @@ angular.module('starter',
     'ionic',
     'ng-token-auth',
     'restangular',
+    'ngCordova',
     'ionic-timepicker',
     'AppCore',
     'starter.controllers',
@@ -28,7 +29,8 @@ angular.module('starter',
 
   // API 設定
   .constant('API', {
-    url: '/development_api'
+    //url: '/development_api'
+    url: 'http://192.168.1.103:3000'
   })
 
   .config(function ($stateProvider,

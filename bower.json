@@ -6,6 +6,7 @@
     "ng-token-auth": "^0.0.28",
     "restangular": "^1.5.2",
     "ionic-nifty-modal": "*",
-    "ionic-timepicker": "^0.4.0"
+    "ionic-timepicker": "^0.4.0",
+    "ngCordova": "^0.1.24-alpha"
   }
 }
