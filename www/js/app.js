@@ -10,7 +10,7 @@ angular.module('starter',
     'starter.services'
   ])
 
-  .run(function ($log, $ionicPlatform) {
+  .run(function ($log, $ionicPlatform, $ionicPopup) {
     $ionicPlatform.ready(function () {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
@@ -23,14 +23,26 @@ angular.module('starter',
         // org.apache.cordova.statusbar required
         StatusBar.styleDefault();
       }
-
     });
+
+    $ionicPlatform.registerBackButtonAction(function(event) {
+      if (true) { // your check here
+        $ionicPopup.confirm({
+          title: 'System warning',
+          template: 'are you sure you want to exit?'
+        }).then(function(res) {
+          if (res) {
+            ionic.Platform.exitApp();
+          }
+        })
+      }
+    }, 100);
   })
 
   // API 設定
   .constant('API', {
     //url: '/development_api'
-    url: 'http://192.168.1.103:3000'
+    url: 'http://192.168.1.101:3000'
   })
 
   .config(function ($stateProvider,

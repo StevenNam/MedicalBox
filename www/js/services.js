@@ -8,8 +8,8 @@ angular.module('starter.services', [])
   .factory('Validation', function () {
 
     function SignIn() {
-      this.email = "";
-      this.password = "";
+      this.email = "test1111@test.com";
+      this.password = "94139413";
 
       this.getJSON = function () {
         return {
@@ -20,11 +20,11 @@ angular.module('starter.services', [])
     }
 
     function SignUp() {
-      this.email = "";
-      this.password = "";
-      this.confirmPassword = "";
-      this.name = "";
-      this.age = "";
+      this.email = "test1111@test.com";
+      this.password = "94139413";
+      this.confirmPassword = "94139413";
+      this.name = "Steven Nam";
+      this.age = 24;
 
       this.getJSON = function () {
         return {

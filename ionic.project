@@ -4,7 +4,7 @@
   "proxies": [
     {
       "path": "/development_api",
-      "proxyUrl": "http://192.168.1.103:3000"
+      "proxyUrl": "http://192.168.1.101:3000"
     }
   ]
 }

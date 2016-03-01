@@ -131,15 +131,14 @@ angular.module('starter.controllers', [])
 
   })
 
-  .controller('HomeCtrl', function ($log, $scope, $ionicModal, $timeout, ErrorMessageService, ApiService, MedicalBox, Drug, OpenFDA) {
+  .controller('HomeCtrl', function ($log, $rootScope, $scope, $ionicModal, $timeout, $ionicPlatform, $cordovaLocalNotification,
+                                    ErrorMessageService, ApiService, MedicalBox, Drug, OpenFDA) {
+
     $log.log('HomeCtrl');
 
     ApiService.execute(MedicalBox.getAllMedicalBox(), function (resp) {
       $scope.medicalBoxes = resp.data.medical_boxes;
     }, null, true);
-
-
-    ApiService.execute(OpenFDA.searchReactionByGenericName('CHLORPHENIRAMINE mALEATE'));
 
     $scope.timePickerObject = {
       inputEpochTime: 0,
@@ -156,6 +155,22 @@ angular.module('starter.controllers', [])
     };
     var typingTimer = null;                                                                                           // timer identifier
     var doneTypingInterval = 1000;                                                                                    // time in ms, 3 second for example
+
+    $ionicPlatform.ready(function () {
+      $rootScope.$on('$cordovaLocalNotification:schedule',
+        function (event, notification, state) {
+          //$log.log('New Notification: ', notification);
+        });
+
+      $rootScope.$on('$cordovaLocalNotification:clear',
+        function (event, notification, state) {
+        });
+
+      /*$rootScope.$on('$cordovaLocalNotification:trigger',
+       function (event, notification, state) {
+       $log.log('Triggered Notification: ', notification);
+       });*/
+    })
 
     $ionicModal.fromTemplateUrl('addMedicalBox.html', {
       scope: $scope,
@@ -197,6 +212,7 @@ angular.module('starter.controllers', [])
 
       $scope.timePickerObject = {
         inputEpochTime: 0,
+        step: 1,
         callback: function (val) {    //Mandatory
           if (val == undefined) {
             return;
@@ -279,6 +295,42 @@ angular.module('starter.controllers', [])
 
       ApiService.execute(MedicalBox.createMedicalBox($scope.medicalBoxForm.getJSON()),
         function (resp) {
+          $ionicPlatform.ready(function () {
+            if (resp.data.frequency == 'Every Day') {
+              var every = 'minute';
+            }
+            else {
+              var every = '';
+            }
+
+            var now = new Date();
+            var alert_time = new Date(now.getTime());
+            alert_time.setHours(resp.data.alert_time.split(':')[0]);
+            alert_time.setMinutes(resp.data.alert_time.split(':')[1]);
+            alert_time.setSeconds(0);
+
+            if (alert_time.getTime() <= now.getTime()) {
+              $log.log('Alert time delays to next day');
+              alert_time.setDate(alert_time.getDate() + 1);
+              $log.log('Now: ', now);
+              $log.log('Alert Time: ', alert_time);
+            }
+
+            $cordovaLocalNotification.schedule({
+              id: resp.data.id,
+              title: resp.data.name,
+              text: '',
+              at: alert_time,
+              every: every
+            }).then(function (resp) {
+              $cordovaLocalNotification.getAll()
+                .then(function (resp) {
+                  $log.log('All Notification: ', resp);
+                })
+            });
+
+          })
+
           $scope.medicalBoxes.push(resp.data);
           $scope.addMedicalBoxModal.hide();
         }, null, true);
@@ -291,6 +343,39 @@ angular.module('starter.controllers', [])
 
       ApiService.execute(MedicalBox.updateMedicalBoxById($scope.selectedMedicalBox),
         function (resp) {
+          $ionicPlatform.ready(function () {
+            if (resp.data.frequency == 'Every Day') {
+              var every = 'minute';
+            }
+            else {
+              var every = '';
+            }
+
+            var now = new Date();
+            var alert_time = new Date(now.getTime());
+            alert_time.setHours(resp.data.alert_time.split(':')[0]);
+            alert_time.setMinutes(resp.data.alert_time.split(':')[1]);
+            alert_time.setSeconds(0);
+            if (alert_time.getTime() <= now.getTime()) {
+              $log.log('Alert time delays to next day');
+              alert_time.setDate(alert_time.getDate() + 1);
+              $log.log('Now: ', now);
+            }
+
+            $cordovaLocalNotification.update({
+              id: resp.data.id,
+              title: resp.data.name,
+              at: alert_time,
+              every: every
+            }).then(function (resp) {
+              $log.log('Update Notification: ', resp);
+              $cordovaLocalNotification.getAll()
+                .then(function (resp) {
+                  $log.log('All Notification: ', resp);
+                })
+            })
+          });
+
           $scope.medicalBoxes[$scope.index] = resp.data;
           $scope.updateMedicalBoxModal.hide();
         }, null, true);
@@ -299,6 +384,14 @@ angular.module('starter.controllers', [])
     $scope.deleteMedicalBox = function (index) {
       ApiService.execute(MedicalBox.deleteMedicalBoxById($scope.medicalBoxes[index].id),
         function (resp) {
+          $cordovaLocalNotification.cancel($scope.medicalBoxes[index].id)
+            .then(function (resp) {
+              $log.log('Clear Notification: ', resp);
+              $cordovaLocalNotification.getAll()
+                .then(function (resp) {
+                  $log.log('All Notification: ', resp);
+                })
+            });
           $scope.medicalBoxes.splice(index, 1);
         }, null, true);
     };
@@ -306,6 +399,40 @@ angular.module('starter.controllers', [])
     $scope.copyMedicalBox = function (id) {
       ApiService.execute(MedicalBox.copyMedicalBoxById(id),
         function (resp) {
+          $ionicPlatform.ready(function () {
+            if (resp.data.frequency == 'Every Day') {
+              var every = 'minute';
+            }
+            else {
+              var every = '';
+            }
+
+            var now = new Date();
+            var alert_time = new Date(now.getTime());
+            alert_time.setHours(resp.data.alert_time.split(':')[0]);
+            alert_time.setMinutes(resp.data.alert_time.split(':')[1]);
+            alert_time.setSeconds(0);
+
+            if (alert_time.getTime() <= now.getTime()) {
+              $log.log('Alert time delays to next day');
+              alert_time.setDate(alert_time.getDate() + 1);
+              $log.log('Now: ', now);
+              $log.log('Alert Time: ', alert_time);
+            }
+
+            $cordovaLocalNotification.schedule({
+              id: resp.data.id,
+              title: resp.data.name,
+              text: '',
+              at: alert_time,
+              every: every
+            }).then(function (resp) {
+              $cordovaLocalNotification.getAll()
+                .then(function (resp) {
+                  $log.log('All Notification: ', resp);
+                })
+            });
+          })
           $scope.medicalBoxes.push(resp.data);
         }, null, true);
     };
@@ -313,11 +440,11 @@ angular.module('starter.controllers', [])
     $scope.addDrug = function () {
       $log.log($scope.drugForm.getJSON());
 
-      if($scope.drugForm.name == '' || $scope.drugForm.name == undefined) {
+      if ($scope.drugForm.name == '' || $scope.drugForm.name == undefined) {
         return ErrorMessageService.customErrorMessage('Select Drug Fail', 'Drug Name Cant Empty');
       }
 
-      if($scope.drugForm.amount == 0) {
+      if ($scope.drugForm.amount == 0) {
         return ErrorMessageService.customErrorMessage('Select Drug Fail', 'Amount Cant Be Zero');
       }
 
@@ -330,9 +457,9 @@ angular.module('starter.controllers', [])
 
     $scope.deleteDrug = function (index) {
       ApiService.execute(Drug.deleteDrugById($scope.selectedMedicalBox.id, $scope.selectedMedicalBox.drugs[index].id),
-      function (resp) {
-        $scope.selectedMedicalBox.drugs.splice(index, 1);
-      }, null, true);
+        function (resp) {
+          $scope.selectedMedicalBox.drugs.splice(index, 1);
+        }, null, true);
     };
 
     $scope.searchDrugByName = function () {
@@ -350,7 +477,7 @@ angular.module('starter.controllers', [])
               $log.log($scope.drugs);
             },
             function (resp) {
-              if(resp.status == 404) {
+              if (resp.status == 404) {
                 ErrorMessageService.customErrorMessage('Search Drug By Name', 'No match found');
               }
             })
@@ -364,7 +491,6 @@ angular.module('starter.controllers', [])
       $scope.selectDrugModal.hide();
     };
   })
-
 
 
   .controller('ChatsCtrl', function ($scope, Chats) {
@@ -383,8 +509,8 @@ angular.module('starter.controllers', [])
   })
 
   /*.controller('ChatDetailCtrl', function ($scope, $stateParams, Chats) {
-    $scope.chat = Chats.get($stateParams.chatId);
-  })*/
+   $scope.chat = Chats.get($stateParams.chatId);
+   })*/
 
   .controller('AccountCtrl', function ($scope) {
     $scope.settings = {
