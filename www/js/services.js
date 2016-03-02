@@ -160,7 +160,7 @@ angular.module('starter.services', [])
       getDrugInfoByGenericName: function (genericName) {
         return function () {
           genericName = genericName.replace(' ', '+');
-          return Restangular.oneUrl('openFDA', 'https://api.fda.gov/drug/event.json?search=patient.drug.openfda.generic_name.exact:"' + genericName.toUpperCase() + '"&count=patient.reaction.reactionmeddrapt.exact').get();
+          return Restangular.oneUrl('openFDA', 'https://api.fda.gov/drug/event.json?search=patient.drug.openfda.generic_name.exact:"' + genericName.toUpperCase() + '"').get();
         }
       }
     }

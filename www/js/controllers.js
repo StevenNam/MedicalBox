@@ -131,7 +131,7 @@ angular.module('starter.controllers', [])
 
   })
 
-  .controller('HomeCtrl', function ($log, $rootScope, $scope, $ionicModal, $timeout, $ionicPlatform, $cordovaLocalNotification,
+  .controller('HomeCtrl', function ($log, $rootScope, $scope, $ionicModal, $timeout, $ionicPlatform, $cordovaLocalNotification, $ionicPopup,
                                     ErrorMessageService, ApiService, MedicalBox, Drug, OpenFDA) {
 
     $log.log('HomeCtrl');
@@ -488,12 +488,29 @@ angular.module('starter.controllers', [])
 
     $scope.selectDrug = function (drugName) {
       $scope.drugForm.name = drugName;
+
+      ApiService.execute(OpenFDA.searchReactionByGenericName(drugName),
+        function (resp) {
+          var sideEffect = '';
+          for (i = 0; i < resp.data.results.length; i++) {
+            sideEffect += '<li>' + resp.data.results[i].term + '</li>';
+          }
+
+          $ionicPopup.alert({
+            title: '<b class="assertive">Side Effect Of Drug</b>',
+            template: sideEffect,
+            buttons: [{
+              text: 'Confirm',
+              type: 'button-assertive'
+            }]
+          })
+        }, null, true);
       $scope.selectDrugModal.hide();
     };
   })
 
 
-  .controller('ChatsCtrl', function ($scope, Chats) {
+  /*.controller('ChatsCtrl', function ($scope, Chats) {
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
     // To listen for when this page is active (for example, to refresh data),
@@ -506,7 +523,7 @@ angular.module('starter.controllers', [])
     $scope.remove = function (chat) {
       Chats.remove(chat);
     };
-  })
+  })*/
 
   /*.controller('ChatDetailCtrl', function ($scope, $stateParams, Chats) {
    $scope.chat = Chats.get($stateParams.chatId);
